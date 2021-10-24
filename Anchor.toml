@@ -9,4 +9,4 @@ cluster = "devnet"
 wallet = "/Users/aoikurokawa/.config/solana/id.json"
 
 [scripts]
-test = "mocha"
+test = "npx mocha"
