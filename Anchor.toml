@@ -1,5 +1,5 @@
 [programs.localnet]
-mysolana = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+mysolana = "4B2EcqWMuDwGjy1aFRMEKrrf7JakJHiJHyeKwv12GZxn"
 
 [registry]
 url = "https://anchor.projectserum.com"
@@ -9,4 +9,4 @@ cluster = "localnet"
 wallet = "/Users/aoikurokawa/.config/solana/id.json"
 
 [scripts]
-test = "mocha -t 1000000 tests/"
+test = "mocha"
