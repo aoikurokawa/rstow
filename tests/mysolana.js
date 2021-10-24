@@ -1,15 +1,14 @@
 const assert = require("assert");
-const anchor = require('@project-serum/anchor');
+const anchor = require("@project-serum/anchor");
 const { SystemProgram } = anchor.web3;
 
-describe('mysolana', () => {
-
+describe("Mysolanaapp", () => {
   const provider = anchor.Provider.env();
   anchor.setProvider(provider);
-  const program = anchor.workspace.Mysolana;
-  it("Creates a counter", async () => {
+  const program = anchor.workspace.Mysolanaapp;
+  it("It initializes the account", async () => {
     const baseAccount = anchor.web3.Keypair.generate();
-    await program.rpc.create({
+    await program.rpc.initialize("Hello World", {
       accounts: {
         baseAccount: baseAccount.publicKey,
         user: provider.wallet.publicKey,
@@ -19,23 +18,26 @@ describe('mysolana', () => {
     });
 
     const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    console.log('Count 0: ', account.count.toString());
-    assert.ok(account.count.toString() == 0);
+    console.log('Data: ', account.data);
+    assert.ok(account.data === "Hello World");
     _baseAccount = baseAccount;
-  })
 
-  it('Increments the counter', async () => {
-    // Add your test here.
+  });
+
+  it("Updates a previously created account", async () => {
     const baseAccount = _baseAccount;
 
-    await program.rpc.increment({
+    await program.rpc.update("Some new data", {
       accounts: {
         baseAccount: baseAccount.publicKey,
       },
     });
 
     const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    console.log("Count 1: ", account.count.toString());
-    assert.ok(account.count.toString() == 1);
+    console.log('Updated data: ', account.data)
+    assert.ok(account.data === "Some new data");
+    console.log('all account data:', account)
+    console.log('All data: ', account.dataList);
+    assert.ok(account.dataList.length === 2);
   });
 });
