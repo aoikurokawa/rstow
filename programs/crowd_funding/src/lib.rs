@@ -46,8 +46,6 @@ pub mod crowd_funding {
             return Err(ProgramError::InsufficientFunds);
         }
 
-        // **ctx.accounts.authority.try_borrow_mut_lamports()? -= amount;
-        // **ctx.try_borrow_mut_lamports()? += amount;
         anchor_lang::solana_program::system_instruction::transfer(
             ctx.accounts.authority.key,
             ctx.program_id,
@@ -73,7 +71,6 @@ pub mod crowd_funding {
 
         if all_projects[&project_id].goal_amount >= all_projects[&project_id].current_amount {}
 
-        // if all_projects
         Ok(())
     }
 
