@@ -1,6 +1,8 @@
-const assert = require("assert");
-const anchor = require("@project-serum/anchor");
-const { SystemProgram } = anchor.web3;
+import * as anchor from "@project-serum/anchor/";
+import { Program } from "@project-serum/anchor";
+import { assert } from "chai";
+
+import { Mysolana } from "../target/types/mysolana";
 
 describe("Mysolanaapp", () => {
   const provider = anchor.Provider.env();
@@ -17,11 +19,12 @@ describe("Mysolanaapp", () => {
       signers: [baseAccount],
     });
 
-    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    console.log('Data: ', account.data);
+    const account = await program.account.baseAccount.fetch(
+      baseAccount.publicKey
+    );
+    console.log("Data: ", account.data);
     assert.ok(account.data === "Hello World");
     _baseAccount = baseAccount;
-
   });
 
   it("Updates a previously created account", async () => {
@@ -33,11 +36,13 @@ describe("Mysolanaapp", () => {
       },
     });
 
-    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    console.log('Updated data: ', account.data)
+    const account = await program.account.baseAccount.fetch(
+      baseAccount.publicKey
+    );
+    console.log("Updated data: ", account.data);
     assert.ok(account.data === "Some new data");
-    console.log('all account data:', account)
-    console.log('All data: ', account.dataList);
+    console.log("all account data:", account);
+    console.log("All data: ", account.dataList);
     assert.ok(account.dataList.length === 2);
   });
 });
