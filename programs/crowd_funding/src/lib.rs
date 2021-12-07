@@ -60,7 +60,7 @@ pub mod crowd_funding {
 
     pub fn achieve_project(ctx: Context<AchieveProject>, project_id: u64) -> ProgramResult {
         let state = &mut ctx.accounts.state;
-        let all_projects = &state.projects;
+        let all_projects = & mut state.projects;
 
         let now = Clock::get().unwrap().unix_timestamp;
 
@@ -69,7 +69,23 @@ pub mod crowd_funding {
             // return Err(ProgramError::);
         }
 
-        if all_projects[&project_id].goal_amount >= all_projects[&project_id].current_amount {}
+        let current_amount = all_projects[&project_id].current_amount;
+
+        if all_projects[&project_id].goal_amount >= current_amount {
+            msg!("Succeeded your project");
+
+            anchor_lang::solana_program::system_instruction::transfer(
+                ctx.program_id,
+                ctx.accounts.authority.key,
+                current_amount,
+            );
+            
+            if let Some(x) = all_projects.get_mut(&project_id) {
+                x.current_amount += 0
+            }
+            // current_amount = 0;
+            // all_projects[&project_id].current_amount = 0;
+        }
 
         Ok(())
     }
