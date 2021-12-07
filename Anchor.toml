@@ -1,5 +1,6 @@
 [programs.devnet]
-mysolana = "4B2EcqWMuDwGjy1aFRMEKrrf7JakJHiJHyeKwv12GZxn"
+mysolana = "3dKzaAHmyLqr9qH8ZwzKLBe9uU38XYV82G32LThsW4EB"
+crowd_funding = "8tY4ZQ8LzVgU27cxi1VvRu3WJc3jw531gNRWZWP6zWyL"
 
 [registry]
 url = "https://anchor.projectserum.com"
@@ -9,4 +10,4 @@ cluster = "devnet"
 wallet = "/Users/aoikurokawa/.config/solana/id.json"
 
 [scripts]
-test = "scripts/run-integ-tests.sh"
+test = "yarn ts-mocha -p ./tsconfig.json -t 1000000 --paths tests/*.spec.ts"

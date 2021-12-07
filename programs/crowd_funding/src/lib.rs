@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use std::collections::HashMap;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("8tY4ZQ8LzVgU27cxi1VvRu3WJc3jw531gNRWZWP6zWyL");
 
 #[program]
 pub mod crowd_funding {
