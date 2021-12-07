@@ -9,4 +9,4 @@ cluster = "devnet"
 wallet = "/Users/aoikurokawa/.config/solana/id.json"
 
 [scripts]
-test = "yarn mocha"
+test = "scripts/run-integ-tests.sh"
