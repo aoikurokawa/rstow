@@ -60,7 +60,7 @@ pub mod crowd_funding {
 
     pub fn achieve_project(ctx: Context<AchieveProject>, project_id: u64) -> ProgramResult {
         let state = &mut ctx.accounts.state;
-        let all_projects = & mut state.projects;
+        let all_projects = &mut state.projects;
 
         let now = Clock::get().unwrap().unix_timestamp;
 
@@ -79,19 +79,27 @@ pub mod crowd_funding {
                 ctx.accounts.authority.key,
                 current_amount,
             );
-            
             if let Some(x) = all_projects.get_mut(&project_id) {
-                x.current_amount += 0
+                x.current_amount += 0;
+                x.achieved = true;
             }
-            // current_amount = 0;
-            // all_projects[&project_id].current_amount = 0;
         }
 
         Ok(())
     }
 
-    pub fn delete_project(ctx: Context<CreateProject>, _new_project: IProject) -> ProgramResult {
+    pub fn delete_project(ctx: Context<CreateProject>, _project_id: u64) -> ProgramResult {
         let state = &mut ctx.accounts.state;
+        let all_projects = &mut state.projects;
+
+        if !all_projects[&_project_id].achieved {
+            msg!("Not achieved yet");
+        }
+
+        all_projects.remove(&_project_id);
+
+        msg!("The project has removed");
+
         Ok(())
     }
 }
