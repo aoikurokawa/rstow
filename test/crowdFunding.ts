@@ -21,6 +21,8 @@ describe("CrowdFunding", () => {
     "confirmed"
   );
 
+  let allProjects: Project[] = [];
+
   interface Project {
     project_id: number;
     representative: PublicKey;
@@ -47,6 +49,7 @@ describe("CrowdFunding", () => {
       deadline: Date.now(),
       achieved: false,
     };
+    allProjects.push(newProject);
   });
 
   it("Initialize", async () => {
