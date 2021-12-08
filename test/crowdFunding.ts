@@ -16,6 +16,10 @@ describe("CrowdFunding", () => {
   const program: anchor.Program = anchor.workspace.CrowdFunding;
   const provider = anchor.Provider.env();
   const wallet = provider.wallet as anchor.Wallet;
+  const connection = new anchor.web3.Connection(
+    anchor.web3.clusterApiUrl("devnet"),
+    "confirmed"
+  );
 
   interface Project {
     project_id: number;
@@ -26,8 +30,28 @@ describe("CrowdFunding", () => {
     achieved: boolean;
   }
 
-  it("Is initialized!", async () => {
+  before(async () => {
+    let newUser = Keypair.generate();
+    let airdropSignature = await connection.requestAirdrop(
+      newUser.publicKey,
+      LAMPORTS_PER_SOL
+    );
+    await connection.confirmTransaction(airdropSignature);
+
+    let newProject: Project;
+    newProject = {
+      project_id: 0,
+      representative: newUser.publicKey,
+      current_amount: 0,
+      goal_amount: 100,
+      deadline: Date.now(),
+      achieved: false,
+    };
+  });
+
+  it("Initialize", async () => {
     // Add your test here.
+
     const tx = await program.rpc.initialize({});
     console.log("Your transaction signature", tx);
   });
