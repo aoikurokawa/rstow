@@ -55,7 +55,11 @@ describe("CrowdFunding", () => {
   it("Initialize", async () => {
     // Add your test here.
 
-    const tx = await program.rpc.initialize({});
+    const tx = await program.rpc.initialize({
+      accounts: {
+        allProjects,
+      },
+    });
     console.log("Your transaction signature", tx);
   });
 });

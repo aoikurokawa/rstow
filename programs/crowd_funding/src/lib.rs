@@ -10,9 +10,7 @@ pub mod crowd_funding {
 
     pub fn initialize(ctx: Context<Initialize>, _new_project: IProject) -> ProgramResult {
         let state = &mut ctx.accounts.state;
-        // let copy_project_ids = old_project_ids.project_ids.clone();
         state.projects.insert(0, _new_project);
-        // old_project_ids.account.project_ids
         Ok(())
     }
 
@@ -139,14 +137,8 @@ pub struct AchieveProject<'info> {
 pub struct State {
     pub authority: Pubkey,
     pub number_of_project: u64,
-    pub projects: HashMap<u64, IProject>,
+    pub projects: Vec<IProject>,
 }
-
-// #[account]
-// pub struct Project {
-//     pub authority: Pubkey,
-//     pub project_ids: Vec<u64>,
-// }
 
 #[account]
 pub struct IProject {
