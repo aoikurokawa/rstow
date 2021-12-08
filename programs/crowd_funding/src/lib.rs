@@ -8,9 +8,9 @@ pub mod crowd_funding {
 
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>, _new_project: IProject) -> ProgramResult {
+    pub fn initialize(ctx: Context<Initialize>) -> ProgramResult {
         let state = &mut ctx.accounts.state;
-        state.projects.insert(0, _new_project);
+        state.projects = Vec::new();
         Ok(())
     }
 
@@ -19,7 +19,7 @@ pub mod crowd_funding {
         let current_project = &mut state.number_of_project;
         let next_project_id = *current_project + 1;
 
-        state.projects.insert(next_project_id, _new_project);
+        state.projects.push(_new_project);
         Ok(())
     }
 
