@@ -30,27 +30,35 @@ pub mod crowd_funding {
     ) -> ProgramResult {
         let state = &mut ctx.accounts.state;
         let all_projects = &mut state.projects;
+        // let project: IProject;
 
         let now = Clock::get().unwrap().unix_timestamp;
 
-        if all_projects[&project_id].deadline < now {
-            msg!("The project is over!");
-            // return Err(ProgramError::);
-        }
+        for iter_project in all_projects {
+            if iter_project.project_id == project_id {
+                // project = iter_project;
+                if iter_project.deadline < now {
+                    msg!("The project is over!");
+                    // return Err(ProgramError::);
+                }
 
-        let rent_exemption = Rent::get()?.minimum_balance(ctx.accounts.authority.data_len());
-        if **ctx.accounts.authority.lamports.borrow() - rent_exemption < amount {
-            msg!("Insufficient balance");
-            return Err(ProgramError::InsufficientFunds);
-        }
+                let rent_exemption =
+                    Rent::get()?.minimum_balance(ctx.accounts.authority.data_len());
+                if **ctx.accounts.authority.lamports.borrow() - rent_exemption < amount {
+                    msg!("Insufficient balance");
+                    return Err(ProgramError::InsufficientFunds);
+                }
 
-        anchor_lang::solana_program::system_instruction::transfer(
-            ctx.accounts.authority.key,
-            ctx.program_id,
-            amount,
-        );
-        if let Some(x) = all_projects.get_mut(&project_id) {
-            x.current_amount += amount
+                anchor_lang::solana_program::system_instruction::transfer(
+                    ctx.accounts.authority.key,
+                    ctx.program_id,
+                    amount,
+                );
+                // if let Some(x) = all_projects.get_mut(&project_id) {
+                //     x.current_amount += amount
+                // }
+                iter_project.current_amount += amount;
+            }
         }
 
         Ok(())
