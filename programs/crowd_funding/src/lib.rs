@@ -101,13 +101,23 @@ pub mod crowd_funding {
         let state = &mut ctx.accounts.state;
         let all_projects = &mut state.projects;
 
-        if !all_projects[&_project_id].achieved {
-            msg!("Not achieved yet");
+        let mut project_index: usize = 0;
+
+        for (index, iter_project) in all_projects.iter().enumerate() {
+            if iter_project.project_id == _project_id {
+                // project = iter_project;
+                if !iter_project.achieved {
+                    msg!("Not achieved yet");
+                    // return Err(ProgramError::);
+                }
+
+                project_index = index;
+
+                msg!("The project has removed");
+            }
         }
 
-        all_projects.remove(&_project_id);
-
-        msg!("The project has removed");
+        all_projects.remove(project_index);
 
         Ok(())
     }
