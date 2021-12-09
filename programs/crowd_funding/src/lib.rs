@@ -70,24 +70,27 @@ pub mod crowd_funding {
 
         let now = Clock::get().unwrap().unix_timestamp;
 
-        if all_projects[&project_id].deadline > now {
-            msg!("The project is under");
-            // return Err(ProgramError::);
-        }
+        for iter_project in all_projects {
+            if iter_project.project_id == project_id {
+                // project = iter_project;
+                if iter_project.deadline > now {
+                    msg!("The project is under");
+                    // return Err(ProgramError::);
+                }
 
-        let current_amount = all_projects[&project_id].current_amount;
+                let current_amount = iter_project.current_amount;
 
-        if all_projects[&project_id].goal_amount >= current_amount {
-            msg!("Succeeded your project");
+                if iter_project.goal_amount >= current_amount {
+                    msg!("Succeeded your project");
+                    anchor_lang::solana_program::system_instruction::transfer(
+                        ctx.program_id,
+                        ctx.accounts.authority.key,
+                        current_amount,
+                    );
 
-            anchor_lang::solana_program::system_instruction::transfer(
-                ctx.program_id,
-                ctx.accounts.authority.key,
-                current_amount,
-            );
-            if let Some(x) = all_projects.get_mut(&project_id) {
-                x.current_amount += 0;
-                x.achieved = true;
+                    iter_project.current_amount = 0;
+                    iter_project.achieved = true;
+                }
             }
         }
 
