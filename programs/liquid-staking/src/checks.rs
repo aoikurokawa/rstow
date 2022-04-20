@@ -52,3 +52,26 @@ pub fn check_owner_program<'info, A: ToAccountInfo<'info>>(
         Err(ProgramError::InvalidArgument.into())
     }
 }
+
+pub fn check_mint_authority(mint: &Mint, mint_authority: Pubkey, field_name: &str) -> Result<()> {
+    if mint.mint_authority.contains(&mint_authority) {
+        Ok(())
+    } else {
+        msg!(
+            "Invalid {} mint authority {}. Expected {}",
+            field_name,
+            mint.mint_authority.unwrap_or_default(),
+            mint_authority
+        );
+        Err(ProgramError::InvalidArgument.into())
+    }
+}
+
+pub fn check_freeze_authority(mint: &Mint, field_name: &str) -> Result<()> {
+    if mint.freeze_authority.is_none() {
+        Ok(())
+    } else {
+        msg!("Mint {} must have freeze authority not set", field_name);
+        Err(ProgramError::InvalidArgument.into())
+    }
+}
