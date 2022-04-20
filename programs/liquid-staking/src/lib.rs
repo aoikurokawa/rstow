@@ -1,8 +1,16 @@
 use anchor_lang::prelude::*;
 use error::CommonError;
+use stake_wrapper::StakeWrapper;
+use std::{
+    convert::{TryFrom, TryInto},
+    fmt::Display,
+    ops::{Deref, DerefMut},
+    str::FromStr,
+};
 
 pub mod error;
 pub mod stake_wrapper;
+pub mod ticket_account;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
