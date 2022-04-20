@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 use error::CommonError;
 
 pub mod error;
+pub mod stake_wrapper;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
