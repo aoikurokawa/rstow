@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use anchor_lang::prelude::*;
 
 #[error_code]
@@ -65,4 +67,62 @@ pub enum CommonError {
 
     #[msg("BAD1 Invalid validator")]
     InvalidValidator = 47525,
+}
+
+// Conversion into a [cmpError]
+pub trait IntoCmpError {
+    /// Converts the value into a [CmpError].
+    fn into_cmp_error(self) -> Option<CmpError>;
+}
+
+impl<T> IntoCmpError for Result<T> {
+    fn into_cmp_error(self) -> Option<CmpError> {
+        self.err()?.into_cmp_error()
+    }
+}
+
+impl IntoCmpError for anchor_lang::error::Error {
+    fn into_cmp_error(self) -> Option<CmpError> {
+        Some(CmpError(self))
+    }
+}
+
+impl IntoCmpError for Option<anchor_lang::error::Error> {
+    fn into_cmp_error(self) -> Option<CmpError> {
+        self?.into_cmp_error()
+    }
+}
+
+impl From<anchor_lang::error::Error> for CmpError {
+    fn from(err: anchor_lang::error::Error) -> Self {
+        CmpError(err)
+    }
+}
+
+/// A Comparable error: an error that can be compared (via equality) to other errors.
+#[repr(transparent)]
+#[derive(Debug)]
+pub struct CmpError(pub anchor_lang::error::Error);
+
+impl PartialEq for CmpError {
+    fn eq(&self, other: &Self) -> bool {
+        let (CmpError(a), CmpError(b)) = (self, other);
+        match (a, b) {
+            (Error::AnchorError(err_a), Error::AnchorError(err_b)) => {
+                err_a.error_code_number == err_b.error_code_number
+            }
+            (Error::ProgramError(err_a), Error::ProgramError(err_b)) => {
+                err_a.program_error == err_b.program_error
+            }
+            _ => false,
+        }
+    }
+}
+
+impl Eq for CmpError {}
+
+impl Display for CmpError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.0.fmt(f)
+    }
 }
