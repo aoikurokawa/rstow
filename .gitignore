@@ -8,3 +8,8 @@ node_modules
 test-ledger
 
 .env
+
+
+# Added by cargo
+
+/target
